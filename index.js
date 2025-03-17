@@ -62,13 +62,48 @@ app.get("/get-all-transaction", async (req, res) => {
         return res.status(500).json({ error: true, message: "Internal Server Error" });
     }
 });
+app.put("/update-transaction/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { amount, date, description } = req.body;
+  
+      const updatedTransaction = await Transaction.findByIdAndUpdate(
+        id,
+        { amount, date, description },
+        { new: true } // Return updated document
+      );
+  
+      if (!updatedTransaction) {
+        return res.status(404).json({ error: "Transaction not found" });
+      }
+  
+      res.json({ message: "Transaction updated successfully", updatedTransaction });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update transaction" });
+    }
+  });
+
+  app.delete("/delete-transaction/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deletedTransaction = await Transaction.findByIdAndDelete(id);
+  
+      if (!deletedTransaction) {
+        return res.status(404).json({ error: "Transaction not found" });
+      }
+  
+      res.json({ message: "Transaction deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete transaction" });
+    }
+  });
 
 
 
 mongoose
   .connect(
-    // `mongodb+srv://akashdevadiga919:b86AgQurWwJbh7nR@cluster0.eb2qr.mongodb.net/finance?retryWrites=true&w=majority&appName=Cluster0`
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.eb2qr.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`
+    `mongodb+srv://akashdevadiga919:b86AgQurWwJbh7nR@cluster0.eb2qr.mongodb.net/finance?retryWrites=true&w=majority&appName=Cluster0`
+    // `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.eb2qr.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`
     // `mongodb+srv://akashdevadiga919:j6ShctabFo2Ozdmt@cluster0.0nxas.mongodb.net/notesapp?retryWrites=true&w=majority&appName=Cluster0`
   )
 //   mongodb+srv://akashdevadiga919:b86AgQurWwJbh7nR@cluster0.eb2qr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
