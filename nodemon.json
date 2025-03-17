@@ -1,0 +1,8 @@
+{
+    "env":{
+        
+        "DB_USER":"akashdevadiga919",
+        "DB_PASSWORD":"b86AgQurWwJbh7nR",
+        "DB_NAME":"finance"
+    }
+}
